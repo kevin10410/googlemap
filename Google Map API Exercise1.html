@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Get Penguin API</title>
+	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?AIzaSyCT0r1YOriUdRU0rtYZlfH3fRQXHqvsukY&callback=initMap">
+	</script>
+	<style>
+		#map {
+			height: 400px;
+			width: 100%;
+		}
+	</style>
+</head>
+
+<body>
+	<h3>My Google Maps Demo</h3>
+	<div id="map"></div>
+	<script>
+
+		// function getPosition() {
+		// 	navigator.geolocation.getCurrentPosition(function (data) {
+		// 		let latitude = data.coords.latitude;
+		// 		let longitude = data.coords.longitude;
+		// 		console.log('緯度：', latitude);
+		// 		console.log('經度：', longitude);
+		// 		initMap(latitude, longitude);
+		// 	});
+		// };
+
+		// function initMap(latitude, longitude) {
+		// 	var map = new google.maps.Map(document.getElementById('map'), {
+		// 		//zoom 屬性指定地圖的縮放層級。 縮放：0 是最低的縮放
+		// 		zoom: 20,
+		// 		//center 屬性會告知 API 要在哪裡放置地圖中心
+		// 		center: { lat: latitude, lng: longitude}
+		// 	});
+		// 	//增加標簽
+		// 	var marker = new google.maps.Marker({
+		// 		position: { lat: latitude, lng: longitude},
+		// 		map: map
+		// 	});
+		// }
+
+		function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+				//zoom 屬性指定地圖的縮放層級。 縮放：0 是最低的縮放
+				zoom: 4,
+				//center 屬性會告知 API 要在哪裡放置地圖中心
+				center: { lat: 23, lng: 23}
+			});
+			//增加標簽
+			var marker = new google.maps.Marker({
+				position: { lat: 23, lng: 23},
+				map: map
+			});
+			console.log(marker);
+		}
+
+		// getPosition();
+
+	</script>
+	
+</body>
+
+</html>
