@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Get Penguin API</title>
+	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCT0r1YOriUdRU0rtYZlfH3fRQXHqvsukY&libraries=places&callback=initMap">
+	</script>
+	<style>
+		#map {
+			height: 400px;
+			width: 100%;
+		}
+
+		input {
+			width: 50%;
+		}
+	</style>
+</head>
+
+<body>
+	<h3>My Google Maps Demo</h3>
+	<div id="map"></div>
+	<input type='text' placeholder="請輸入目的地" class='destinatipn'>
+	<button value='WALKING'>走路</button>
+	<button value='DRIVING'>開車</button>
+	<button value='TRANSIT'>大眾運輸</button>
+	<script>
+
+		const bottons = document.querySelectorAll('button');
+		const drive = document.querySelector('.drive');
+		const input = document.querySelector('input');
+		bottons.forEach(function (botton) {
+			botton.addEventListener('click', calculate);
+		})
+		let map;
+		let latitude;
+		let longitude;
+		let infoWindow;
+		let directionsService;
+		let directionsDisplay;
+		let defaultBounds;
+
+		function initMap() {
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: { lat: 24.3, lng: 120.51 },
+				zoom: 6
+			});
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+
+				navigator.geolocation.getCurrentPosition(function (position) {
+					var pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+					latitude = pos.lat;
+					longitude = pos.lng;
+					infoWindow = new google.maps.InfoWindow({ map: map });
+					infoWindow.setPosition(pos);
+					infoWindow.setContent('你在這裡！');
+					map.setCenter(pos);
+					map.setZoom(15);
+
+				}, function () {
+					handleLocationError(true, infoWindow, map.getCenter());
+				});
+			} else {
+				// Browser doesn't support Geolocation
+				handleLocationError(false, infoWindow, map.getCenter());
+			}
+			AutocompleteDirectionsHandler();
+			// let sw = new google.maps.LatLng(21.632463, 119.138876);
+			// let ne = new google.maps.LatLng(25.408927, 122.102168);
+			// defaultBounds = new google.maps.LatLngBounds({ lat: 21.63, lng: 119.14 }, { lat: 25.41, lng: 122.10 });
+			// new google.maps.places.Autocomplete(input, { placeIdOnly: false, bounds: defaultBounds });
+		};
+
+		function calculate(event) {
+			if (directionsDisplay === undefined) {
+				directionsDisplay = new google.maps.DirectionsRenderer;
+			}
+			if (directionsService === undefined) {
+				directionsService = new google.maps.DirectionsService;
+			};
+			directionsDisplay.setMap(map);
+			directionsService.route({
+				origin: { lat: latitude, lng: longitude },
+				destination: input.value,
+				travelMode: event.target.value,
+			}, function (response, status) {
+				if (status === 'OK') {
+					directionsDisplay.setDirections(response);
+					let fb = new google.maps.DirectionsRenderer(response)
+					console.log(directionsDisplay);
+					infoWindow.close();
+				} else {
+					window.alert('Directions request failed due to ' + status);
+				}
+			});
+		}
+
+		
+
+		/**
+		 * @constructor
+		*/
+		function AutocompleteDirectionsHandler() {
+			//設定搜尋偏好區域邊界
+			let sw = new google.maps.LatLng(21.632463, 119.138876);
+			let ne = new google.maps.LatLng(25.408927, 122.102168);
+			defaultBounds = new google.maps.LatLngBounds({ lat: 21.63, lng: 119.14 }, { lat: 25.41, lng: 122.10 });
+
+			let autocomplete = new google.maps.places.Autocomplete(
+				input, { placeIdOnly: false, bounds: defaultBounds });
+			autocomplete.addListener('place_changed', function () {
+				var place = autocomplete.getPlace();
+			});
+			//c8c3b85b60a77ec51ae3b744de86016103d73a7b
+			// 把指定的DOM元素放到google地圖上的控制條
+			// map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+		};
+
+
+	</script>
+	
+</body>
+
+</html>
